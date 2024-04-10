@@ -1,0 +1,10 @@
+---
+
+- name: Container app
+  community.docker.docker_container:
+    name: app
+    state: started
+    restart: true
+    image: rootsh/app:{{ version }}
+    ports:
+    - "3000:3000"

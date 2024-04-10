@@ -29,6 +29,24 @@ jobs:
       - run:
           name: Run tests
           command: npm test --passWithNoTests
+
+  build-push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - setup_remote_docker:
+          version: 25.0.3
+      - checkout
+      - run: |
+          export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
+          export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
+          echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
+          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker buildx build --push --tag $REPO/$GIT_REPO_NAME$:$GIT_CURRENT_VERSION --platform $ARCH .
+    environment:
+      ARCH: "linux/amd64,linux/arm/v7,linux/arm64"
+      REPO: rootsh
+
 workflows:
   lint-test:
     jobs:
@@ -38,6 +56,15 @@ workflows:
               ignore:
               - main
       - test-node:
+          filters:
+            branches:
+              ignore:
+                - main
+
+  build-deploy:
+      jobs:
+       - build-push:
+          context: docker_hub
           filters:
             branches:
               ignore:
