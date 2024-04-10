@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
- lint-dockerfile:
+  lint-dockerfile:
     docker:
       - image: alpine
     steps:
@@ -35,10 +35,10 @@ workflows:
       - lint-dockerfile
           filters:
             branches:
-              only:
+              ignore:
                 - main
       - test-node
           filters:
             branches:
-              only:
+              ignore:
                 - main
