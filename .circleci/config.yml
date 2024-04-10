@@ -54,7 +54,7 @@ jobs:
           echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
     environment:
-      ARCH: "linux/amd64,linux/arm/v7,linux/arm64"
+      ARCH: "linux/amd64"
       REPO: rootsh
 
 workflows:
