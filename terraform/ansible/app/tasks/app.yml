@@ -5,6 +5,6 @@
     name: app
     state: started
     restart: true
-    image: rootsh/app:{{ version }}
+    image: rootsh/junto-teste:{{ version }}
     ports:
     - "3000:3000"

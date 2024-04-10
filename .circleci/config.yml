@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5
+  terraform: circleci/terraform@3.2.1
 jobs:
   lint-dockerfile:
     docker:
@@ -57,6 +58,21 @@ jobs:
       ARCH: "linux/amd64"
       REPO: rootsh
 
+  deploy:
+    executor: terraform/default
+    steps:
+      - checkout
+      - terraform/init:
+          path: .
+      - terraform/validate:
+          path: .
+      - terraform/plan:
+          path: .
+      - terraform/apply:
+          path: .
+    working_directory: ./terraform
+
+
 workflows:
   lint-test:
     jobs:
@@ -75,6 +91,15 @@ workflows:
       jobs:
        - build-push:
           context: docker_hub
+          filters:
+            branches:
+              ignore:
+                - main
+
+       - deploy:
+          context: aws
+          requires: 
+            - build-push
           filters:
             branches:
               ignore:
