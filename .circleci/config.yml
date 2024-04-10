@@ -32,12 +32,12 @@ jobs:
 workflows:
   lint-test:
     jobs:
-      - lint-dockerfile
+      - lint-dockerfile:
           filters:
             branches:
               ignore:
-                - main
-      - test-node
+              - main
+      - test-node:
           filters:
             branches:
               ignore:
