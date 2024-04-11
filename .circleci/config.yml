@@ -38,16 +38,16 @@ jobs:
       - setup_remote_docker:
           version: default
       - checkout
-      - run:
-          name: setup Qemu
-          command: |
-            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - run:
-          name: Create builder
-          command: |
-            export DOCKER_CLI_EXPERIMENTAL=enabled
-            docker context create multi-arch-build
-            docker buildx create --use multi-arch-build
+      # - run:
+      #     name: setup Qemu
+      #     command: |
+      #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      # - run:
+      #     name: Create builder
+      #     command: |
+      #       export DOCKER_CLI_EXPERIMENTAL=enabled
+      #       docker context create multi-arch-build
+      #       docker buildx create --use multi-arch-build
       - run: |
           export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
           export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
@@ -72,12 +72,10 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: |
-          cat bash.env >> $BASH_ENV
       - run:
           name: Terraform 
           command: |
-            source $BASH_ENV
+            source bash.env
             echo $GIT_CURRENT_VERSION
             # cd /tmp/project/terraform
             # apk add ansible --no-cache
