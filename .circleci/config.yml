@@ -38,7 +38,7 @@ jobs:
           version: default
       - checkout
       - run:
-          name: setup Qemu
+          name: Setup Qemu
           command: |
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - run:
@@ -47,14 +47,18 @@ jobs:
             export DOCKER_CLI_EXPERIMENTAL=enabled
             docker context create multi-arch-build
             docker buildx create --use multi-arch-build
-      - run: |
-          export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
-          export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
-          echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
-          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-          DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
-      - run: |
-          cp $BASH_ENV bash.env
+      - run:
+          name: Build and Push container
+          command: | 
+            export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
+            export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
+            echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
+      - run:
+          name: Copy env BASH_ENV to file bash.env
+          command: |
+            cp $BASH_ENV bash.env
       - persist_to_workspace:
           root: .
           paths:
