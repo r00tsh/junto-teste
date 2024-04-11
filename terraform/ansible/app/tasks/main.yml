@@ -10,3 +10,6 @@
 
 - name: APP
   import_tasks: app.yml
+
+- name: CloudWatch
+  import_tasks: cloudwatch.yml

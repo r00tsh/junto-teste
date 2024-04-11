@@ -99,8 +99,8 @@ jobs:
       - run:
           name: Health check app
           command: |
+            cd /tmp/project/terraform
             export EC2_IP=$(terraform output | awk '{ print $3 }' | sed 's/"//g')
-            echo $EC2_IP
             curl -v http://$EC2_IP
 
 

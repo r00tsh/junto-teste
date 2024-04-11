@@ -40,6 +40,7 @@ resource "aws_iam_policy" "cloudwacth" {
           "logs:CreateLogStream",
           "logs:PutLogEvents",
           "logs:DescribeLogStreams",
+          "logs:PutRetentionPolicy",
         ]
         Effect   = "Allow"
         Resource = "*"

@@ -1,0 +1,7 @@
+---
+- name: Install damazon-cloudwatch-agent
+  ansible.builtin.dnf:
+    name: amazon-cloudwatch-agent
+    state: latest
+
+
