@@ -105,18 +105,18 @@ jobs:
 
 
 workflows:
-  # lint-test:
-  #   jobs:
-  #     - lint-dockerfile:
-  #         filters:
-  #           branches:
-  #             ignore:
-  #             - main
-  #     - test-node:
-  #         filters:
-  #           branches:
-  #             ignore:
-  #               - main
+  lint-test:
+    jobs:
+      - lint-dockerfile:
+          filters:
+            branches:
+              ignore:
+              - main
+      - test-node:
+          filters:
+            branches:
+              ignore:
+                - main
 
   build-deploy:
       jobs:
@@ -124,7 +124,7 @@ workflows:
           context: docker_hub
           filters:
             branches:
-              ignore:
+              only:
                 - main
        - deploy:
           context: aws
@@ -132,5 +132,5 @@ workflows:
             - build-push
           filters:
             branches:
-              ignore:
+              only:
                 - main
