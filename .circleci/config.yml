@@ -68,6 +68,7 @@ jobs:
           name: Terraform Plan
           command: |
             cd /tmp/project/terraform
+            apk add ansible --no-cache
             terraform init
             terraform validate
             TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
