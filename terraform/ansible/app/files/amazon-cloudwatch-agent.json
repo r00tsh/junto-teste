@@ -1,12 +1,38 @@
-{
-	"file_path": "/var/log/nginx/access.log",
-	"log_group_name": "app-log-group",
-	"log_stream_name": "{hostname}/access.log",
-	"timestamp_format" :"[%d/%b/%Y:%H:%M:%S %z]"
+
+"agent": {
+    "run_as_user": "cwagent"
 },
-{
-	"file_path": "/var/log/nginx/error.log",
-	"log_group_name": "app-log-group",
-	"log_stream_name": "{hostname}/error.log",
-	"timestamp_format" :"[%d/%b/%Y:%H:%M:%S %z]"
+"logs": {
+    "logs_collected": {
+            "files": {
+                    "collect_list": [
+                            {
+                                    "file_path": "/var/log/nginx/access.log",
+                                    "log_group_class": "STANDARD",
+                                    "log_group_name": "app-nginx-access-log",
+                                    "log_stream_name": "{instance_id}",
+                                    "retention_in_days": 5
+                            },
+                            {
+                                    "file_path": "/var/log/nginx/error.log",
+                                    "log_group_class": "STANDARD",
+                                    "log_group_name": "app-nginx-error-log",
+                                    "log_stream_name": "{instance_id}",
+                                    "retention_in_days": 5
+                            }
+                    ]
+            }
+    }
+},
+"metrics": {
+    "metrics_collected": {
+            "collectd": {
+                    "metrics_aggregation_interval": 60
+            },
+            "statsd": {
+                    "metrics_aggregation_interval": 60,
+                    "metrics_collection_interval": 30,
+                    "service_address": ":8125"
+            }
+    }
 }

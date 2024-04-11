@@ -10,6 +10,17 @@
     name: amazon-cloudwatch-agent
     enabled: true
 
+- name: Install collectd
+  ansible.builtin.dnf:
+    name: collectd
+    state: latest
+
+- name: Service collectd
+  ansible.builtin.systemd_service:
+    state: started
+    name: collectd
+    enabled: true
+
 - name: amazon-cloudwatch-agent conf
   ansible.builtin.copy:
     src: amazon-cloudwatch-agent.json
