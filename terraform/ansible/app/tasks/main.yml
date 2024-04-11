@@ -1,0 +1,15 @@
+---
+- name: Common
+  import_tasks: common.yml
+
+- name: Nginx
+  import_tasks: nginx.yml
+
+- name: Docker
+  import_tasks: docker.yml
+
+- name: APP
+  import_tasks: app.yml
+
+- name: CloudWatch
+  import_tasks: cloudwatch.yml

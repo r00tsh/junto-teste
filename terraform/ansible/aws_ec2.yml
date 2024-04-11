@@ -1,0 +1,9 @@
+plugin: amazon.aws.aws_ec2
+filters:
+  tag:Ansible: app
+  instance-state-name : running
+compose:
+  ansible_host: instance_id
+  ansible_connection: 'community.aws.aws_ssm'
+regions:
+  - us-east-2
