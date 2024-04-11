@@ -55,6 +55,7 @@ jobs:
           echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
       - run: |
+          echo $BASH_ENV
           cp $BASH_ENV bash.env
       - persist_to_workspace:
           root: .
@@ -77,6 +78,7 @@ jobs:
       - run:
           name: Terraform Plan
           command: |
+            echo $GIT_CURRENT_VERSION
             cd /tmp/project/terraform
             apk add ansible --no-cache
             terraform init
