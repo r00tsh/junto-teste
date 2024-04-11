@@ -54,6 +54,12 @@ jobs:
           echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
           echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
+      - run: |
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
     environment:
       ARCH: "linux/amd64"
       REPO: rootsh
@@ -64,6 +70,10 @@ jobs:
       - image: hashicorp/terraform:1.5.7
     steps:
       - checkout
+      - attach_workspace:
+          at: .
+      - run: |
+          cat bash.env >> $BASH_ENV
       - run:
           name: Terraform Plan
           command: |
