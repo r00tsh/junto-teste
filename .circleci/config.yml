@@ -77,12 +77,14 @@ jobs:
             sudo apt-get update
             sudo apt-get install ansible -y
             ansible-galaxy collection install amazon.aws
-            sudo apt-get install python3-boto -y
+            sudo apt-get install python3-boto3 -y
             sudo apt-get install -y gnupg software-properties-common wget -y
             wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
             echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
             sudo apt-get update
             sudo apt-get install terraform -y
+            curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+            sudo dpkg -i session-manager-plugin.deb
       - run:
           name: Terraform 
           command: |
