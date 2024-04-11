@@ -74,17 +74,18 @@ jobs:
       - attach_workspace:
           at: .
       - run: |
+          cat bash.env
           cat bash.env >> $BASH_ENV
       - run:
-          name: Terraform Plan
+          name: Terraform 
           command: |
             echo $GIT_CURRENT_VERSION
-            cd /tmp/project/terraform
-            apk add ansible --no-cache
-            terraform init
-            terraform validate
-            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
-            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
+            # cd /tmp/project/terraform
+            # apk add ansible --no-cache
+            # terraform init
+            # terraform validate
+            # TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
+            # TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
 
 
 workflows:
