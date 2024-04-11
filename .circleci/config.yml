@@ -80,6 +80,7 @@ jobs:
             cd /tmp/project/terraform
             apk add ansible --no-cache
             ansible-galaxy collection install amazon.aws
+            apk add py3-boto3 --no-cache
             terraform init
             terraform validate
             TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
