@@ -42,6 +42,7 @@ resource "aws_iam_policy" "cloudwacth" {
           "logs:PutLogEvents",
           "logs:DescribeLogStreams",
           "logs:PutRetentionPolicy",
+          "cloudwatch:PutMetricData",
         ]
         Effect   = "Allow"
         Resource = "*"
