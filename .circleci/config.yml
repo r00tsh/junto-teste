@@ -59,18 +59,19 @@ jobs:
       REPO: rootsh
 
   deploy:
-    executor: terraform/default
+    working_directory: /tmp/project
+    docker:
+      - image: hashicorp/terraform:1.5.7
     steps:
       - checkout
-      - terraform/init:
-          path: .
-      - terraform/validate:
-          path: .
-      - terraform/plan:
-          path: .
-      - terraform/apply:
-          path: .
-    working_directory: ./terraform
+      - run:
+          name: Terraform Plan
+          command: |
+            cd /tmp/project/terraform
+            terraform init
+            terraform validate
+            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
+            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
 
 
 workflows:
@@ -95,10 +96,9 @@ workflows:
             branches:
               ignore:
                 - main
-
        - deploy:
           context: aws
-          requires: 
+          requires:
             - build-push
           filters:
             branches:
