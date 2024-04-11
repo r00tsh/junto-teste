@@ -96,8 +96,10 @@ jobs:
             terraform validate
             TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
             TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
+      - run:
+          name: Health check app
+          command: |
             export EC2_IP=$(terraform output | awk '{ print $3 }' | sed 's/"//g')
-            apk add curl --no-cache
             curl http://$EC2_IP
 
 
