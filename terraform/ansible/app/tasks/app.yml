@@ -8,5 +8,3 @@
     image: rootsh/junto-teste:{{ version }}
     ports:
     - "3000:3000"
-    comparisons:
-      image: strict
