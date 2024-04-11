@@ -65,8 +65,8 @@ jobs:
 
   deploy:
     working_directory: /tmp/project
-    docker:
-      - image: cimg/base:stable
+    machine:
+      image: ubuntu-2204:2024.01.2
     steps:
       - checkout
       - attach_workspace:
