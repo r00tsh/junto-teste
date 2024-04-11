@@ -36,6 +36,7 @@ resource "aws_iam_policy" "cloudwacth" {
     Statement = [
       {
         Action = [
+          "ec2:DescribeTags",
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents",
