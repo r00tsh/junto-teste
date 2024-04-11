@@ -16,7 +16,7 @@ resource "aws_iam_role" "app" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "mx_AmazonSSMManagedInstanceCore" {
+resource "aws_iam_role_policy_attachment" "app_AmazonSSMManagedInstanceCore" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = aws_iam_role.app.name
 }
@@ -27,7 +27,7 @@ resource "aws_iam_instance_profile" "app" {
 }
 
 resource "aws_iam_policy" "cloudwacth" {
-  name        = "APPCloudWatcg"
+  name        = "APPCloudWatch"
   path        = "/"
   description = "Policy for EC2 access CloudWatch"
 
@@ -36,11 +36,19 @@ resource "aws_iam_policy" "cloudwacth" {
     Statement = [
       {
         Action = [
-          "ec2:Describe*",
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams",
         ]
         Effect   = "Allow"
         Resource = "*"
       },
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwacth" {
+  policy_arn = aws_iam_policy.cloudwacth.arn
+  role       = aws_iam_role.app.name
 }
