@@ -52,10 +52,9 @@ jobs:
           export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
           export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
           echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
-          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-          DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
+          # echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          # DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
       - run: |
-          echo $BASH_ENV
           cp $BASH_ENV bash.env
       - persist_to_workspace:
           root: .
@@ -79,6 +78,8 @@ jobs:
       - run:
           name: Terraform 
           command: |
+            ls $BASH_ENV
+            cat $BASH_ENV
             echo $GIT_CURRENT_VERSION
             # cd /tmp/project/terraform
             # apk add ansible --no-cache
@@ -89,18 +90,18 @@ jobs:
 
 
 workflows:
-  lint-test:
-    jobs:
-      - lint-dockerfile:
-          filters:
-            branches:
-              ignore:
-              - main
-      - test-node:
-          filters:
-            branches:
-              ignore:
-                - main
+  # lint-test:
+  #   jobs:
+  #     - lint-dockerfile:
+  #         filters:
+  #           branches:
+  #             ignore:
+  #             - main
+  #     - test-node:
+  #         filters:
+  #           branches:
+  #             ignore:
+  #               - main
 
   build-deploy:
       jobs:
