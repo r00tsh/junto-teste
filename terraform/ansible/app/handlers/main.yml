@@ -4,3 +4,8 @@
   ansible.builtin.systemd_service:
     state: restarted
     name: nginx
+
+- name: Restart amazon-cloudwatch-agent
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: amazon-cloudwatch-agent
