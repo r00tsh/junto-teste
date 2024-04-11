@@ -38,22 +38,22 @@ jobs:
       - setup_remote_docker:
           version: default
       - checkout
-      # - run:
-      #     name: setup Qemu
-      #     command: |
-      #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      # - run:
-      #     name: Create builder
-      #     command: |
-      #       export DOCKER_CLI_EXPERIMENTAL=enabled
-      #       docker context create multi-arch-build
-      #       docker buildx create --use multi-arch-build
+      - run:
+          name: setup Qemu
+          command: |
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - run:
+          name: Create builder
+          command: |
+            export DOCKER_CLI_EXPERIMENTAL=enabled
+            docker context create multi-arch-build
+            docker buildx create --use multi-arch-build
       - run: |
           export GIT_REPO_NAME=$(basename $(git remote get-url origin) | cut -f1 -d'.')
           export GIT_CURRENT_VERSION=$(git rev-parse --short HEAD)
           echo "export GIT_CURRENT_VERSION=$GIT_CURRENT_VERSION" >> $BASH_ENV
-          # echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-          # DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
+          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --push --tag $REPO/$GIT_REPO_NAME:$GIT_CURRENT_VERSION --platform $ARCH .
       - run: |
           cp $BASH_ENV bash.env
       - persist_to_workspace:
@@ -77,12 +77,12 @@ jobs:
           command: |
             source bash.env
             echo $GIT_CURRENT_VERSION
-            # cd /tmp/project/terraform
-            # apk add ansible --no-cache
-            # terraform init
-            # terraform validate
-            # TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
-            # TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
+            cd /tmp/project/terraform
+            apk add ansible --no-cache
+            terraform init
+            terraform validate
+            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform plan
+            TF_VAR_app_version=$GIT_CURRENT_VERSION terraform apply -auto-approve
 
 
 workflows:
